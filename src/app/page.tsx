@@ -2,7 +2,6 @@
 
 // import IndexClientPage from './client';
 import { Book } from './types';
-import { Suspense } from 'react';
 import dynamic from 'next/dynamic';
 import IndexLoading from './loading';
 
@@ -19,7 +18,5 @@ export default async function IndexPage(){
   const books = await api.book.list()
   const genres: Book['genre'][] = Array.from(new Set(books.map(book => book.genre)))
 
-  return <Suspense>
-    <IndexClientPage books={books} genres={genres} />
-  </Suspense>
+  return <IndexClientPage books={books} genres={genres} />
 }
