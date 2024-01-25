@@ -1,17 +1,14 @@
 'use client' // Client component -> (states, interactions...)
 
 import { useEffect, useMemo, useState } from 'react'
-import data from '../books.json'
 import { Book } from './types';
 
 // console.log(data)
 
-const books: Book[] = data.library.map((d) => d.book)
 // console.log(books)
 
-const genres: Book['genre'][] = Array.from(new Set(books.map(book => book.genre)))
 
-export default function Home() {
+export default function IndexClientPage({ books, genres}: {books: Book[], genres: Book['genre'][]}) {
 
   const [genre, setGenre] = useState<Book['genre']>("");
   const [readList, setReadList] = useState<Book['ISBN'][]>([]);
