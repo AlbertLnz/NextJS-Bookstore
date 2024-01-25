@@ -45,6 +45,12 @@ export default function Home() {
 
     const readList = getReadList()
     callback(readList)
+
+    window.addEventListener('storage', (event) => {
+      if(event.key === 'readList'){
+        callback(getReadList())
+      }
+    })
   }
 
   useEffect(() => {
