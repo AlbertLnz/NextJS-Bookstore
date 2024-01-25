@@ -14,15 +14,12 @@ const genres: string[] = Array.from(new Set(books.map(book => book.genre)))
 export default function Home() {
 
   const [genre, setGenre] = useState<string>("");
-  const matches = useMemo(() => {
-
-    if(!genre) return books
-
-    return books.filter(book => {
+  const matches = useMemo(() => genre ?
+    books.filter((book) => {
       if(book.genre !== genre) return false
       return true
     })
-  }, [genre])
+  : books, [genre])
 
   return (
     <article className='grid gap-4'>
