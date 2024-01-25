@@ -6,7 +6,7 @@ import { Suspense } from 'react';
 import dynamic from 'next/dynamic';
 import IndexLoading from './loading';
 
-const IndexClientPage = dynamic(() => import('./client')) // src -> false === no execute on pre-render
+const IndexClientPage = dynamic(() => import('./client'), {ssr: false}) // src -> false === no execute on pre-render
 
 const api = {
   book: {
