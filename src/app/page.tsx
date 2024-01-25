@@ -11,8 +11,13 @@ console.log(books )
 
 export default function Home() {
   return (
-    <main>
-      
-    </main>
+    <ul className='grid grid-cols-[repeat(auto-fill,minmax(230px,1fr))] gap-4'>
+      {books.map((book) => (
+        <li key={book.ISBN}>
+          <img src={book.cover} className='aspect-[9/14] object-cover' alt={book.title} />
+          <p>{book.title}</p>
+        </li>
+      ))}
+    </ul>
   );
 }
