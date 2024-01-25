@@ -24,6 +24,24 @@ export default function Home() {
     })
   : books, [genre])
 
+  const api = {
+    readList: {
+      onChange: (callback: (readList: Book['ISBN'][]) => void) => {
+        function getReadList(){
+          const readList = JSON.parse(localStorage.getItem('readList') ?? "[]") as Book['ISBN'][]
+          callback(readList)
+        }
+    
+        window.addEventListener('storage', getReadList)
+        
+        getReadList()
+    
+        return () => window.removeEventListener('storage', getReadList)
+      },
+      update: (readList: Book['ISBN'][]) => localStorage.setItem('readList', JSON.stringify(readList))
+    }
+  }
+
   const handleBookFav = (bookISBN: Book['ISBN']) => {
     const draft = readList.includes(bookISBN) 
     ? readList.filter((readBook) => readBook !== bookISBN) 
@@ -31,33 +49,19 @@ export default function Home() {
 
     setReadList(draft)
 
-    localStorage.setItem('readList', JSON.stringify(draft))
+    api.readList.update(draft)
 
     // const draft = structuredClone(readList) // --> structuredClone supports Map and Set
     // draft.has(bookISBN) ? draft.delete(bookISBN) : draft.add(bookISBN)
     // setReadList(draft)
   }
 
-  function onReadListenChange(callback: (readList: Book['ISBN'][]) => void){
-    function getReadList(){
-      const readList = JSON.parse(localStorage.getItem('readList') ?? "[]") as Book['ISBN'][]
-      callback(readList)
-    }
-
-    window.addEventListener('storage', getReadList)
-    
-    getReadList()
-
-    return () => window.removeEventListener('storage', getReadList)
-  }
-
   useEffect(() => {
     // setReadList(JSON.parse(localStorage.getItem('readList') ?? "[]") as Book['ISBN'][])
-    const unsubscribe = onReadListenChange(setReadList)
+    const unsubscribe = api.readList.onChange(setReadList)
 
     return () => unsubscribe()
   }, [])
-  
 
   return (
     <article className='grid gap-4'>
