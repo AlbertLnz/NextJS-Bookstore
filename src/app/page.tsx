@@ -40,17 +40,12 @@ export default function Home() {
 
   function onReadListenChange(callback: (readList: Book['ISBN'][]) => void){
     function getReadList(){
-      return JSON.parse(localStorage.getItem('readList') ?? "[]") as Book['ISBN'][]
+      const readList = JSON.parse(localStorage.getItem('readList') ?? "[]") as Book['ISBN'][]
+      callback(readList)
     }
 
-    const readList = getReadList()
-    callback(readList)
-
-    window.addEventListener('storage', (event) => {
-      if(event.key === 'readList'){
-        callback(getReadList())
-      }
-    })
+    window.addEventListener('storage', getReadList)
+    
   }
 
   useEffect(() => {
