@@ -9,17 +9,26 @@ import { Book } from './types';
 const books: Book[] = data.library.map((d) => d.book)
 // console.log(books)
 
-const genres: string[] = Array.from(new Set(books.map(book => book.genre)))
+const genres: Book['genre'][] = Array.from(new Set(books.map(book => book.genre)))
 
 export default function Home() {
 
-  const [genre, setGenre] = useState<string>("");
+  const [genre, setGenre] = useState<Book['genre']>("");
+  const [readList, setReadList] = useState<Book['ISBN'][]>([]);
+  
   const matches = useMemo(() => genre ?
     books.filter((book) => {
       if(book.genre !== genre) return false
       return true
     })
   : books, [genre])
+
+  const handleBookFav = (bookISBN: Book['ISBN']) => {
+    setReadList((readList) => 
+      readList.includes(bookISBN) 
+        ? readList.filter((readBook) => readBook !== bookISBN) 
+        : [...readList, bookISBN])
+  }
 
   return (
     <article className='grid gap-4'>
@@ -35,9 +44,13 @@ export default function Home() {
       </nav>
       <ul className='grid grid-cols-[repeat(auto-fill,minmax(230px,1fr))] gap-4'>
         {matches.map((book) => (
-          <li key={book.ISBN}>
+          <li key={book.ISBN} className='grid gap-2' onClick={() => handleBookFav(book.ISBN)}>
             <img src={book.cover} className='aspect-[9/14] object-cover' alt={book.title} />
-            <p>{book.title}</p>
+            <p>{readList.includes(book.ISBN) &&
+                  <span>⭐</span>
+               }
+              {book.title}
+            </p>
           </li>
         ))}
       </ul>
