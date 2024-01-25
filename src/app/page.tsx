@@ -6,9 +6,10 @@ import { Book, Author } from './types';
 
 // console.log(data)
 
-
 const books: Book[] = data.library.map((d) => d.book)
-console.log(books )
+// console.log(books )
+
+const genres: string[] = Array.from(new Set(books.map(book => book.genre)))
 
 export default function Home() {
 
@@ -23,10 +24,11 @@ export default function Home() {
       <nav>
         <select value={genre} onChange={(e) => setGenre(e.target.value)}>
           <option value="">Todos</option>
-          <option value="Ciencia ficción">Ciencia ficción</option>
-          <option value="Fantasía">Fantasía</option>
-          <option value="Terror">Terror</option>
-          <option value="Zombies">Zombies</option>
+          {genres.map((genre) => (
+            <option key={genre} value={genre}>
+              {genre}
+            </option>
+          ))}
         </select>
       </nav>
       <ul className='grid grid-cols-[repeat(auto-fill,minmax(230px,1fr))] gap-4'>
