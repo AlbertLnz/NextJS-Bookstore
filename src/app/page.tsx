@@ -1,23 +1,28 @@
 'use client' // Client component -> (states, interactions...)
 
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 import data from '../books.json'
-import { Book, Author } from './types';
+import { Book } from './types';
 
 // console.log(data)
 
 const books: Book[] = data.library.map((d) => d.book)
-// console.log(books )
+// console.log(books)
 
 const genres: string[] = Array.from(new Set(books.map(book => book.genre)))
 
 export default function Home() {
 
   const [genre, setGenre] = useState<string>("");
-  const matches = genre ? books.filter(book => {
-    if(genre && book.genre !== genre) return false
-    return true
-  }) : books
+  const matches = useMemo(() => {
+
+    if(!genre) return books
+
+    return books.filter(book => {
+      if(book.genre !== genre) return false
+      return true
+    })
+  }, [genre])
 
   return (
     <article className='grid gap-4'>
