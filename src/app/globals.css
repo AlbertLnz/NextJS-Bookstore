@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 :root {
-  background-color: #000;
-  color: white;
+  background-color: Canvas;
+  color: CanvasText;
   color-scheme: dark
 }
