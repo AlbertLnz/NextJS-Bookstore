@@ -38,8 +38,18 @@ export default function Home() {
     // setReadList(draft)
   }
 
+  function onReadListenChange(callback: (readList: Book['ISBN'][]) => void){
+    function getReadList(){
+      return JSON.parse(localStorage.getItem('readList') ?? "[]") as Book['ISBN'][]
+    }
+
+    const readList = getReadList()
+    callback(readList)
+  }
+
   useEffect(() => {
-    setReadList(JSON.parse(localStorage.getItem('readList') ?? "[]") as Book['ISBN'][])
+    // setReadList(JSON.parse(localStorage.getItem('readList') ?? "[]") as Book['ISBN'][])
+    onReadListenChange(setReadList)
   }, [])
   
 
