@@ -46,11 +46,16 @@ export default function Home() {
 
     window.addEventListener('storage', getReadList)
     
+    getReadList()
+
+    return () => window.removeEventListener('storage', getReadList)
   }
 
   useEffect(() => {
     // setReadList(JSON.parse(localStorage.getItem('readList') ?? "[]") as Book['ISBN'][])
-    onReadListenChange(setReadList)
+    const unsubscribe = onReadListenChange(setReadList)
+
+    return () => unsubscribe()
   }, [])
   
 
