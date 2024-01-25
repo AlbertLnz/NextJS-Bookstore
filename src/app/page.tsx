@@ -14,8 +14,9 @@ const genres: Book['genre'][] = Array.from(new Set(books.map(book => book.genre)
 export default function Home() {
 
   const [genre, setGenre] = useState<Book['genre']>("");
-  const [readList, setReadList] = useState<Book['ISBN'][]>([]);
-  
+  // const [readList, setReadList] = useState<Book['ISBN'][]>([]);
+  const [readList, setReadList] = useState<Set<Book['ISBN']>>(() => new Set());
+    
   const matches = useMemo(() => genre ?
     books.filter((book) => {
       if(book.genre !== genre) return false
@@ -24,10 +25,14 @@ export default function Home() {
   : books, [genre])
 
   const handleBookFav = (bookISBN: Book['ISBN']) => {
-    setReadList((readList) => 
-      readList.includes(bookISBN) 
-        ? readList.filter((readBook) => readBook !== bookISBN) 
-        : [...readList, bookISBN])
+    // setReadList((readList) => 
+    //   readList.includes(bookISBN) 
+    //     ? readList.filter((readBook) => readBook !== bookISBN) 
+    //     : [...readList, bookISBN])
+
+    const draft = structuredClone(readList) // --> structuredClone supports Map and Set
+    draft.has(bookISBN) ? draft.delete(bookISBN) : draft.add(bookISBN)
+    setReadList(draft)
   }
 
   return (
@@ -46,7 +51,8 @@ export default function Home() {
         {matches.map((book) => (
           <li key={book.ISBN} className='grid gap-2' onClick={() => handleBookFav(book.ISBN)}>
             <img src={book.cover} className='aspect-[9/14] object-cover' alt={book.title} />
-            <p>{readList.includes(book.ISBN) &&
+            <p>{// readList.includes(book.ISBN) &&
+                readList.has(book.ISBN) &&
                   <span>⭐</span>
                }
               {book.title}
