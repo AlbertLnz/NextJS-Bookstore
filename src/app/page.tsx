@@ -5,13 +5,7 @@ import { Book } from './types';
 
 const api = {
   book: {
-    list: async (): Promise<Book[]> => {
-      return new Promise((resolve) => {
-        setTimeout(() => {
-          resolve(import('../books.json').then((data) => data.library.map((obj) => obj.book)))
-        }, 3000)
-      })
-    }
+    list: async (): Promise<Book[]> => import('../books.json').then((data) => data.library.map((obj) => obj.book))
   }
 }
 
