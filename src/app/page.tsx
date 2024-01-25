@@ -6,7 +6,7 @@ import { Suspense } from 'react';
 import dynamic from 'next/dynamic';
 import IndexLoading from './loading';
 
-const IndexClientPage = dynamic(() => import('./client'), {ssr: false}) // src -> false === no execute on pre-render
+const IndexClientPage = dynamic(() => import('./client'), {ssr: false, loading: () => <IndexLoading />}) // src -> false === no execute on pre-render
 
 const api = {
   book: {
@@ -19,7 +19,7 @@ export default async function IndexPage(){
   const books = await api.book.list()
   const genres: Book['genre'][] = Array.from(new Set(books.map(book => book.genre)))
 
-  return <Suspense fallback={<IndexLoading />}>
+  return <Suspense>
     <IndexClientPage books={books} genres={genres} />
   </Suspense>
 }
