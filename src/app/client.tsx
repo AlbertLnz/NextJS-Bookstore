@@ -19,7 +19,7 @@ export default function IndexClientPage({ books, genres}: {books: Book[], genres
       if(book.genre !== genre) return false
       return true
     })
-  : books, [genre])
+  : books, [genre, books])
 
   const api = {
     readList: {
